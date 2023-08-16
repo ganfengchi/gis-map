@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="initial-scale=1.0, user-scalable=no, width=device-width"
+    />
+    <title>HELLO，AMAP!</title>
+    <style>
+      html,
+      body,
+      #container {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script src="https://webapi.amap.com/loader.js"></script>
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        securityJsCode: "29b518155240ffe236ff201263ff5741",
+      };
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      AMapLoader.load({
+        key: "42dbce5c6133a4b0f5d159e01aafc3ad", // 申请好的Web端开发者Key，首次调用 load 时必填
+        version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        // zoom:15
+      })
+        .then((AMap) => {
+          const map = new AMap.Map("container", {
+            viewMode: "3D", //地图模式
+            pitch: 45, //角度
+            terrain: true, //开启图形图
+            zoom: 5,
+          });
+          // 创建一个 Marker 实例：
+          const marker = new AMap.Marker({
+            position: [116.39, 39.9], //位置
+          });
+          marker.on("click", function (e) {
+            const infoWindow = new AMap.infoWindow({
+              isCustom: true,
+              content: "<div>HELLO,AWAP</div>",
+              offset: new AMap.Pixel(0, 0),
+            });
+          });
+          map.add(marker); //
+
+          const lineArr = [
+            [116.368904, 39.913423],
+            [116.382122, 39.901176],
+            [116.387271, 39.912501],
+            [116.398258, 39.9046],
+          ];
+          const polyline = new AMap.Polyline({
+            path: lineArr, // 设置线覆盖物路径
+            strokeColor: "#3366FF", // 线颜色
+            strokeWeight: 5, // 线宽
+            strokeStyle: "solid", // 线样式
+          });
+          map.add(polyline);
+
+          AMap.plugin("AMap.ToolBar", function () {
+            // 异步加载插件
+            let toolbar = new AMap.ToolBar(); // 缩放工具条实例化
+            map.addControl(toolbar);
+          });
+          AMap.plugin("AMap.HawkEye", function () {
+            // 异步加载插件
+            let HawkEye = new AMap.HawkEye(); // 缩放工具条实例化
+            map.addControl(HawkEye);
+          });
+          
+          AMap.plugin("AMap.Scale", function () {
+            // 异步加载插件
+            let Scale = new AMap.Scale(); // 比例尺实例化
+            map.addControl(Scale);
+          });
+        })
+        .catch((e) => {
+          console.error(e); //加载错误提示
+        });
+    </script>
+  </body>
+</html>
